@@ -4,17 +4,24 @@ This is a standalone GitHub repository for the `chandrabhanu35/pro` project.
 
 ## About
 
-This repository contains various files and resources for the Pro project.
+This is an independent repository for the Pro project, maintained separately from other repositories.
 
 ## Repository Contents
 
-- `demo.html.txt` - Demo HTML content file
-- `cm.txt` - Configuration/content file
-- `hi.txt` - Additional content file
+- `demo.html.txt` - Contains sample text content
+- `cm.txt` - Empty file (placeholder)
+- `hi.txt` - Empty file (placeholder)
 
 ## Getting Started
 
-This is an independent repository maintained separately from other projects.
+To clone this repository:
+
+```bash
+git clone https://github.com/chandrabhanu35/pro.git
+cd pro
+```
+
+This repository is set up for storing various project files and can be extended as needed.
 
 ## License
 
