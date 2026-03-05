@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Agent Swarm — Multi-Agent Orchestration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bg-grid"></div>
+
+  <div class="app">
+
+    <!-- ── Header ─────────────────────────────────────────────────── -->
+    <header class="header">
+      <div class="logo">
+        <div class="logo-hex">⬡</div>
+        <div class="logo-text">
+          <span class="logo-title">AI AGENT SWARM</span>
+          <span class="logo-sub">Multi-Agent Orchestration System</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="sys-status" id="sysStatus">
+          <span class="sys-dot active"></span>
+          <span>System Online</span>
+        </div>
+        <div class="powered-by">
+          Powered by <strong>Claude Opus 4.6</strong>
+        </div>
+      </div>
+    </header>
+
+    <!-- ── Task Input ──────────────────────────────────────────────── -->
+    <section class="task-section">
+      <div class="task-bar">
+        <span class="task-chevron">▶</span>
+        <input
+          id="taskInput"
+          class="task-input"
+          type="text"
+          maxlength="300"
+          placeholder="Enter a complex task — the Manager AI will spawn worker agents to solve it in parallel…"
+          autocomplete="off"
+        />
+        <button id="startBtn" class="start-btn">
+          <span class="btn-label">Launch Agents</span>
+          <span class="btn-icon">⚡</span>
+        </button>
+      </div>
+      <div class="examples">
+        <span class="ex-label">Try:</span>
+        <button class="ex-btn" onclick="fillTask(this)">Research the latest AI breakthroughs in 2025</button>
+        <button class="ex-btn" onclick="fillTask(this)">Analyze pros &amp; cons of remote work culture</button>
+        <button class="ex-btn" onclick="fillTask(this)">Create a business plan for a sustainable startup</button>
+        <button class="ex-btn" onclick="fillTask(this)">Plan a 10-day travel itinerary for Japan</button>
+      </div>
+    </section>
+
+    <!-- ── Main Content ────────────────────────────────────────────── -->
+    <main class="main">
+
+      <!-- Agent Dashboard -->
+      <section class="dashboard">
+        <div class="panel-header">
+          <span class="panel-title">AGENT DASHBOARD</span>
+          <span class="badge" id="agentCount">0 Agents</span>
+        </div>
+        <div class="agents-grid" id="agentsGrid">
+          <div class="empty-state" id="emptyState">
+            <div class="empty-emoji">🤖</div>
+            <p class="empty-h">No agents deployed</p>
+            <p class="empty-p">Enter a task above to spawn the swarm</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Message Feed -->
+      <aside class="feed">
+        <div class="panel-header">
+          <span class="panel-title">AGENT COMMUNICATION</span>
+          <span class="badge" id="msgCount">0 msgs</span>
+        </div>
+        <div class="feed-list" id="feedList">
+          <div class="feed-empty">
+            <div class="feed-empty-icon">💬</div>
+            <p>Agent messages appear here in real-time</p>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- ── Final Report ────────────────────────────────────────────── -->
+    <div class="report-overlay" id="reportOverlay" style="display:none">
+      <div class="report-card">
+        <div class="report-hdr">
+          <span>📊</span>
+          <span>MISSION COMPLETE — FINAL REPORT</span>
+          <button class="report-x" id="reportClose">✕</button>
+        </div>
+        <div class="report-body" id="reportBody"></div>
+        <button class="new-task-btn" id="newTaskBtn">🔄 Start New Task</button>
+      </div>
+    </div>
+
+  </div><!-- /app -->
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="client.js"></script>
+</body>
+</html>
