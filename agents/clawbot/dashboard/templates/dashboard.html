@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClawBot AI — Corporate Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #0a0e17;
+            color: #e0e6f0;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1a1f35 0%, #0d1225 100%);
+            border-bottom: 1px solid #2a3050;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header .stats {
+            display: flex;
+            gap: 30px;
+        }
+
+        .stat-box {
+            text-align: center;
+        }
+
+        .stat-box .value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #34d399;
+        }
+
+        .stat-box .value.earnings {
+            color: #fbbf24;
+        }
+
+        .stat-box .label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #6b7394;
+            letter-spacing: 1px;
+        }
+
+        .goal-bar {
+            background: #111827;
+            border-bottom: 1px solid #1f2937;
+            padding: 12px 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .goal-bar .tag {
+            background: #7c3aed;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .goal-bar .text {
+            font-size: 14px;
+            color: #d1d5db;
+        }
+
+        .main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            height: calc(100vh - 130px);
+        }
+
+        .panel {
+            border-right: 1px solid #1f2937;
+            overflow-y: auto;
+        }
+
+        .panel:last-child { border-right: none; }
+
+        .panel-header {
+            position: sticky;
+            top: 0;
+            background: #111827;
+            padding: 14px 20px;
+            border-bottom: 1px solid #1f2937;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #9ca3c0;
+            z-index: 10;
+        }
+
+        /* Org Chart */
+        .org-chart { padding: 20px; }
+
+        .agent-card {
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s;
+        }
+
+        .agent-card.working {
+            border-color: #3b82f6;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.15);
+        }
+
+        .agent-card.done {
+            border-color: #10b981;
+        }
+
+        .agent-card.ceo { margin-left: 0; }
+        .agent-card.vp { margin-left: 30px; }
+        .agent-card.manager { margin-left: 60px; }
+
+        .agent-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .agent-avatar.ceo { background: #7c3aed; }
+        .agent-avatar.vp { background: #2563eb; }
+        .agent-avatar.manager { background: #0891b2; }
+
+        .agent-info { flex: 1; }
+
+        .agent-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .agent-role {
+            font-size: 11px;
+            color: #6b7394;
+        }
+
+        .agent-task {
+            font-size: 12px;
+            color: #a78bfa;
+            margin-top: 3px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .status-dot.idle { background: #4b5563; }
+        .status-dot.thinking { background: #f59e0b; animation: pulse 1s infinite; }
+        .status-dot.working { background: #3b82f6; animation: pulse 1s infinite; }
+        .status-dot.delegating { background: #8b5cf6; animation: pulse 1s infinite; }
+        .status-dot.reporting { background: #06b6d4; animation: pulse 1s infinite; }
+        .status-dot.done { background: #10b981; }
+        .status-dot.blocked { background: #ef4444; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .agent-earnings {
+            font-size: 13px;
+            font-weight: 600;
+            color: #fbbf24;
+        }
+
+        /* Activity Log */
+        .log-panel { padding: 0; }
+
+        .log-entry {
+            padding: 10px 20px;
+            border-bottom: 1px solid #1a1f35;
+            font-size: 13px;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .log-time {
+            color: #4b5563;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 11px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .log-agent {
+            color: #60a5fa;
+            font-weight: 600;
+            flex-shrink: 0;
+            min-width: 60px;
+        }
+
+        .log-msg { color: #d1d5db; }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #4b5563;
+        }
+
+        .empty-state .icon { font-size: 48px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ClawBot AI — Corporate Agent Dashboard</h1>
+        <div class="stats">
+            <div class="stat-box">
+                <div class="value" id="active-count">0</div>
+                <div class="label">Active Agents</div>
+            </div>
+            <div class="stat-box">
+                <div class="value" id="task-count">0</div>
+                <div class="label">Tasks Done</div>
+            </div>
+            <div class="stat-box">
+                <div class="value earnings" id="total-earnings">$0</div>
+                <div class="label">Est. Earnings</div>
+            </div>
+            <div class="stat-box">
+                <div class="value" id="elapsed">0s</div>
+                <div class="label">Elapsed</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="goal-bar">
+        <span class="tag">GOAL</span>
+        <span class="text" id="current-goal">Waiting for directive...</span>
+    </div>
+
+    <div class="main">
+        <div class="panel">
+            <div class="panel-header">Organization</div>
+            <div class="org-chart" id="org-chart">
+                <div class="empty-state">
+                    <div class="icon">&#9881;</div>
+                    <div>Agents standing by...</div>
+                </div>
+            </div>
+        </div>
+        <div class="panel">
+            <div class="panel-header">Live Activity</div>
+            <div class="log-panel" id="activity-log">
+                <div class="empty-state">
+                    <div class="icon">&#9889;</div>
+                    <div>No activity yet</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const RANK_ORDER = { ceo: 0, vp: 1, manager: 2, worker: 3 };
+
+        function renderAgents(agents) {
+            const container = document.getElementById("org-chart");
+            if (!agents || Object.keys(agents).length === 0) return;
+
+            const sorted = Object.values(agents).sort(
+                (a, b) => (RANK_ORDER[a.rank] || 9) - (RANK_ORDER[b.rank] || 9)
+            );
+
+            container.innerHTML = sorted.map(a => {
+                const initials = a.name ? a.name[0] : "?";
+                const isActive = ["working", "thinking", "delegating", "reporting"].includes(a.status);
+                const taskText = a.current_task ? a.current_task.title : "";
+
+                return `
+                <div class="agent-card ${a.rank} ${isActive ? 'working' : ''} ${a.status === 'done' ? 'done' : ''}">
+                    <div class="agent-avatar ${a.rank}">${initials}</div>
+                    <div class="agent-info">
+                        <div class="agent-name">${a.name}</div>
+                        <div class="agent-role">${a.role}</div>
+                        ${taskText ? `<div class="agent-task">${taskText}</div>` : ''}
+                    </div>
+                    <div class="status-dot ${a.status}" title="${a.status}"></div>
+                    <div class="agent-earnings">${a.total_earnings > 0 ? '$' + a.total_earnings.toFixed(0) : ''}</div>
+                </div>`;
+            }).join("");
+        }
+
+        function renderLogs(logs) {
+            const container = document.getElementById("activity-log");
+            if (!logs || logs.length === 0) return;
+
+            container.innerHTML = logs.slice().reverse().map(log => `
+                <div class="log-entry">
+                    <span class="log-time">${log.time}</span>
+                    <span class="log-agent">${log.agent}</span>
+                    <span class="log-msg">${log.message}</span>
+                </div>
+            `).join("");
+        }
+
+        function updateStats(data) {
+            const activeCount = Object.values(data.agents || {}).filter(
+                a => ["working", "thinking", "delegating"].includes(a.status)
+            ).length;
+
+            const doneCount = Object.values(data.agents || {}).filter(
+                a => a.completed_tasks_count > 0
+            ).reduce((sum, a) => sum + a.completed_tasks_count, 0);
+
+            document.getElementById("active-count").textContent = activeCount;
+            document.getElementById("task-count").textContent = doneCount;
+            document.getElementById("total-earnings").textContent =
+                "$" + (data.total_earnings || 0).toLocaleString();
+            document.getElementById("elapsed").textContent =
+                Math.round(data.elapsed || 0) + "s";
+            document.getElementById("current-goal").textContent =
+                data.goal || "Waiting for directive...";
+        }
+
+        // Connect to SSE stream
+        function connect() {
+            const evtSource = new EventSource("/api/stream");
+            evtSource.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                renderAgents(data.agents);
+                renderLogs(data.logs);
+                updateStats(data);
+            };
+            evtSource.onerror = function() {
+                evtSource.close();
+                setTimeout(connect, 3000);
+            };
+        }
+
+        // Initial load
+        fetch("/api/state")
+            .then(r => r.json())
+            .then(data => {
+                renderAgents(data.agents);
+                renderLogs(data.logs);
+                updateStats(data);
+            });
+
+        connect();
+    </script>
+</body>
+</html>
