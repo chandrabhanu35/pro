@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNO Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- MENU SCREEN -->
+    <div id="menu-screen" class="screen active">
+        <div class="menu-bg">
+            <div class="floating-card c1">7</div>
+            <div class="floating-card c2">+2</div>
+            <div class="floating-card c3">↺</div>
+            <div class="floating-card c4">★</div>
+        </div>
+        <div class="menu-box">
+            <div class="uno-logo">UNO</div>
+            <p class="menu-sub">The classic card game — powered by AI bots</p>
+            <h3>Choose Your Battle</h3>
+            <div class="mode-buttons">
+                <button class="mode-btn" onclick="startGame('1v1')">
+                    <span class="mode-icon">⚔️</span>
+                    <span class="mode-title">1 vs 1</span>
+                    <small>You vs 1 AI Bot</small>
+                </button>
+                <button class="mode-btn" onclick="startGame('2v2')">
+                    <span class="mode-icon">🤝</span>
+                    <span class="mode-title">2 vs 2</span>
+                    <small>You + Bot vs 2 Bots</small>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- GAME SCREEN -->
+    <div id="game-screen" class="screen">
+
+        <!-- Top bar -->
+        <div class="top-bar">
+            <button class="btn-menu" onclick="confirmMenu()">🏠 Menu</button>
+            <div id="turn-indicator" class="turn-indicator">Your turn!</div>
+            <div id="mode-badge" class="mode-badge"></div>
+        </div>
+
+        <div class="game-layout">
+
+            <!-- LEFT: Game Board -->
+            <div class="game-board">
+
+                <!-- Opponents Row -->
+                <div id="opponents-row" class="opponents-row"></div>
+
+                <!-- Center: Piles + Status -->
+                <div class="center-zone">
+                    <div class="piles-row">
+                        <div class="pile-wrap" onclick="drawCard()">
+                            <div class="card back" id="draw-pile-card">
+                                <span class="card-center">UNO</span>
+                            </div>
+                            <div class="pile-label">📥 Draw</div>
+                            <div id="deck-count" class="deck-count"></div>
+                        </div>
+
+                        <div id="current-color-ring" class="color-ring"></div>
+
+                        <div class="pile-wrap">
+                            <div class="card" id="top-card"></div>
+                            <div class="pile-label">🃏 Discard</div>
+                        </div>
+                    </div>
+
+                    <div id="game-status" class="game-status"></div>
+
+                    <!-- Color Picker -->
+                    <div id="color-picker" class="color-picker hidden">
+                        <p>Pick a color ✨</p>
+                        <div class="color-options">
+                            <button class="cbtn red" onclick="pickColor('red')">🔴 Red</button>
+                            <button class="cbtn blue" onclick="pickColor('blue')">🔵 Blue</button>
+                            <button class="cbtn green" onclick="pickColor('green')">🟢 Green</button>
+                            <button class="cbtn yellow" onclick="pickColor('yellow')">🟡 Yellow</button>
+                        </div>
+                    </div>
+
+                    <!-- Pass button -->
+                    <button id="pass-btn" class="pass-btn hidden" onclick="passTurn()">Pass Turn ➡</button>
+                </div>
+
+                <!-- Player Area -->
+                <div class="player-area">
+                    <div class="player-info-bar">
+                        <div class="player-tag">
+                            <span class="you-label">YOU</span>
+                            <span id="player-hand-count" class="hand-count">7 cards</span>
+                        </div>
+                        <button id="uno-btn" class="uno-btn hidden" onclick="callUno()">UNO! 🎉</button>
+                    </div>
+                    <div id="player-hand" class="player-hand"></div>
+                </div>
+
+            </div>
+
+            <!-- RIGHT: Chat Panel -->
+            <div class="chat-panel">
+                <div class="chat-header">💬 Live Chat</div>
+                <div id="chat-messages" class="chat-messages"></div>
+                <div class="quick-emojis">
+                    <button onclick="quickReact('🔥')">🔥</button>
+                    <button onclick="quickReact('😂')">😂</button>
+                    <button onclick="quickReact('😤')">😤</button>
+                    <button onclick="quickReact('🎉')">🎉</button>
+                    <button onclick="quickReact('😱')">😱</button>
+                    <button onclick="quickReact('👀')">👀</button>
+                </div>
+                <div class="chat-input-row">
+                    <input id="chat-input" type="text" placeholder="Say something..." maxlength="80" onkeydown="chatKey(event)">
+                    <button onclick="sendChat()">➤</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- WIN SCREEN -->
+    <div id="win-screen" class="screen">
+        <div class="win-box">
+            <div id="win-emoji" class="win-emoji"></div>
+            <h1 id="win-title"></h1>
+            <p id="win-msg"></p>
+            <div class="win-stats" id="win-stats"></div>
+            <div class="win-buttons">
+                <button onclick="startGame(currentMode)">🔄 Play Again</button>
+                <button onclick="showMenu()">🏠 Main Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
